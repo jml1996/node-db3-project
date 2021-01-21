@@ -14,14 +14,14 @@ function find() {
     return db('schemes')
 }
 
-function findById(id) {
-    const scheme = db('schemes')
+async function findById(id) {
+    const scheme = await db('schemes')
         .where('id', id)
         .first()
     if (!scheme) {
         return Promise.resolve(null)
     } else {
-        return scheme
+        return Promise.resolve(scheme)
     }
 }
 
@@ -52,28 +52,12 @@ function update(changes, id) {
         })
 }
 
-function remove(id) {
-    // const deleted = /
-    
+async function remove(id) {
+    const deleted = await findById(id)
     return db('schemes')
-    .where('id', id)
-    .del()
-    
-    // const toBeRemoved = db('schemes')
-    //     .where('id', id)
-    //     .first()
-    // console.log(toBeRemoved)
-    // if (!toBeRemoved) {
-    //     return Promise.resolve(null)
-    // } else {
-    //     db('schemes')
-    //         .where('id', id)
-    //         .del()
-    // }
-    // return toBeRemoved
-    // if (toBeRemoved['removed']) {
-    //     return toBeRemoved['removed']
-    // } else {
-    //     return Promise.resolve(null)
-    // }
+        .where('id', id)
+        .del()
+        .then(() => {
+            return deleted
+        })
 }
