@@ -101,10 +101,18 @@ router.put('/:id', (req, res) => {
 router.delete('/:id', (req, res) => {
   const { id } = req.params;
 
+  let toBeRemoved;
+  Schemes.findById(id)
+    .then(toBeRemovedHack => {
+      toBeRemoved = toBeRemovedHack
+    })
+    .catch(err => {
+      console.log({ message: "Could not do it even wrongly" })
+    })
   Schemes.remove(id)
     .then(deleted => {
       if (deleted) {
-        res.json({ removed: deleted });
+        res.json({ removed: toBeRemoved });
       } else {
         res.status(404).json({ message: 'Could not find scheme with given id' });
       }
